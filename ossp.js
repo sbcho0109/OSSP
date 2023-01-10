@@ -1163,7 +1163,7 @@ const Game =
 
 		// 프로필을 조합해 유저 ID 계산
 		let profile = imageDB.getProfileHash(),
-			id = "@" + sender + ":" + profile;
+			id = /* "@" + */ sender + ":" + profile;
 
 		let data = DB.GameData,
 			used = DB.UsedWord;
@@ -1595,7 +1595,7 @@ const Game =
 							}
 
 							// 똑같은 해시 값을 가지는 프로필은 존재 X
-							ai['id'] = "@" + ai['name'] + ":555555555";
+							ai['id'] = /* "@" */ + ai['name'] + ":555555555";
 
 							/* ai['player'] = */ Game.join(ai['id'], ai['name']);
 
