@@ -1163,7 +1163,7 @@ const Game =
 
 		// 프로필을 조합해 유저 ID 계산
 		let profile = imageDB.getProfileHash(),
-			id = /* "@" + */ sender + ":" + profile;
+			id = "@" + sender + ":" + profile;
 
 		let data = DB.GameData,
 			used = DB.UsedWord;
@@ -1247,10 +1247,10 @@ const Game =
 								Bot.reply("진행 중인 게임이 없습니다.");
 								return;
 							}
-							/* if (!room.equals(data['room'])) {
+							if (!room.equals(data['room'])) {
 								Bot.reply("끝말잇기를 생성한 방에서만 입력이 가능합니다.");
 								return;
-							} */
+							}
 							/* ------------------------------------------------------- */
 
 							Bot.reply(data['room'],
@@ -1289,10 +1289,10 @@ const Game =
 								Bot.reply("현재 생성된 게임이 없습니다.");
 								return;
 							}
-							 /*if (!room.equals(data['room'])) {
+							if (!room.equals(data['room'])) {
 								Bot.reply("끝말잇기를 생성한 방에서만 입력이 가능합니다.");
 								return;
-							} */
+							}
 							/* ------------------------------------------------------- */
 							if (data['power']) {
 								Bot.reply(data['room'], "게임이 이미 진행 중입니다.");
@@ -1320,10 +1320,10 @@ const Game =
 								Bot.reply("현재 생성된 게임이 없습니다.");
 								return;
 							}
-							/* if (!room.equals(data['room'])) {
+							if (!room.equals(data['room'])) {
 								Bot.reply("끝말잇기를 생성한 방에서만 입력이 가능합니다.");
 								return;
-							} */
+							}
 							/* ------------------------------------------------------- */
 							if (data['power']) {
 								Bot.reply(data['room'], "이미 게임이 진행 중입니다.");
@@ -1369,10 +1369,10 @@ const Game =
 								Bot.reply("현재 생성된 게임이 없습니다.");
 								return;
 							}
-							/* if (!room.equals(data['room'])) {
+							if (!room.equals(data['room'])) {
 								Bot.reply("끝말잇기를 생성한 방에서만 입력이 가능합니다.");
 								return;
-							} */
+							}
 							/* ------------------------------------------------------- */
 							let list = data['players'].map(player => player['id']);
 							if (!list.includes(id)) {
@@ -1396,10 +1396,10 @@ const Game =
 								Bot.reply("진행 중인 게임이 없습니다.");
 								return;
 							}
-							/* if (!room.equals(data['room'])) {
+							if (!room.equals(data['room'])) {
 								Bot.reply("끝말잇기를 생성한 방에서만 입력이 가능합니다.");
 								return;
-							} */
+							}
 							/* ------------------------------------------------------- */
 							let manager = data['manager'];
 							if (!id.equals(manager['id'])) {
@@ -1430,10 +1430,10 @@ const Game =
 						Bot.reply("현재 생성된 게임이 없습니다.");
 						return;
 					}
-					/* if (!room.equals(data['room'])) {
+					if (!room.equals(data['room'])) {
 						Bot.reply("끝말잇기를 생성한 방에서만 입력이 가능합니다.");
 						return;
-					} */
+					}
 					/* ------------------------------------------------------- */
 					// 모드는 게임 중에도 변경 가능
 					/* if (data['power']) {
@@ -1548,10 +1548,10 @@ const Game =
 						Bot.reply("게임이 이미 진행 중입니다.");
 						return;
 					} */
-					/* if (!room.equals(data['room'])) {
+					if (!room.equals(data['room'])) {
 						Bot.reply("끝말잇기를 생성한 방에서만 입력이 가능합니다.");
 						return;
-					} */
+					}
 					/* ------------------------------------------------------- */
 					let manager = data['manager'];
 					if (!id.equals(manager['id'])) {
@@ -1595,7 +1595,7 @@ const Game =
 							}
 
 							// 똑같은 해시 값을 가지는 프로필은 존재 X
-							ai['id'] = /* "@" */ + ai['name'] + ":555555555";
+							ai['id'] = "@" + ai['name'] + ":555555555";
 
 							/* ai['player'] = */ Game.join(ai['id'], ai['name']);
 
@@ -1656,7 +1656,7 @@ const Game =
 	},
 };
 
-function response(room, message, sender, isGroupChat, replier, imageDB) { 
+function responseFix(room, message, sender, isGroupChat, replier, imageDB) { 
     try {
 		// 유저가 원치않는 방이라면
 		if (GAME_ROOM_FILTER.includes(room)) {
@@ -1688,3 +1688,32 @@ function response(room, message, sender, isGroupChat, replier, imageDB) {
 }
 
 function onStartCompile() { Timer.stop(); }
+
+function onNotificationPosted(sbn, sm) {
+    var packageName = sbn.getPackageName();
+    if (!packageName.startsWith("com.kakao.tal")) return;
+    var actions = sbn.getNotification().actions;
+    if (actions == null) return;
+    var userId = sbn.getUser().hashCode();
+    for (var n = 0; n < actions.length; n++) {
+        var action = actions[n];
+        if (action.getRemoteInputs() == null) continue;
+        var bundle = sbn.getNotification().extras;
+
+        var msg = bundle.get("android.text").toString();
+        var sender = bundle.getString("android.title");
+        var room = bundle.getString("android.subText");
+        if (room == null) room = bundle.getString("android.summaryText");
+        var isGroupChat = room != null;
+        if (room == null) room = sender;
+        var replier = new com.xfl.msgbot.script.api.legacy.SessionCacheReplier(packageName, action, room, false, "");
+        var icon = bundle.getParcelableArray("android.messages")[0].get("sender_person").getIcon().getBitmap();
+        var image = bundle.getBundle("android.wearable.EXTENSIONS");
+        if (image != null) image = image.getParcelable("background");
+        var imageDB = new com.xfl.msgbot.script.api.legacy.ImageDB(icon, image);
+        com.xfl.msgbot.application.service.NotificationListener.Companion.setSession(packageName, room, action);
+        if (this.hasOwnProperty("responseFix")) {
+            responseFix(room, msg, sender, isGroupChat, replier, imageDB, packageName, userId != 0);
+        }
+    }
+}
