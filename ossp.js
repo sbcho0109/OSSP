@@ -1247,10 +1247,10 @@ const Game =
 								Bot.reply("진행 중인 게임이 없습니다.");
 								return;
 							}
-							if (!room.equals(data['room'])) {
+							/* if (!room.equals(data['room'])) {
 								Bot.reply("끝말잇기를 생성한 방에서만 입력이 가능합니다.");
 								return;
-							}
+							} */
 							/* ------------------------------------------------------- */
 
 							Bot.reply(data['room'],
@@ -1289,10 +1289,10 @@ const Game =
 								Bot.reply("현재 생성된 게임이 없습니다.");
 								return;
 							}
-							if (!room.equals(data['room'])) {
+							 /*if (!room.equals(data['room'])) {
 								Bot.reply("끝말잇기를 생성한 방에서만 입력이 가능합니다.");
 								return;
-							}
+							} */
 							/* ------------------------------------------------------- */
 							if (data['power']) {
 								Bot.reply(data['room'], "게임이 이미 진행 중입니다.");
@@ -1320,10 +1320,10 @@ const Game =
 								Bot.reply("현재 생성된 게임이 없습니다.");
 								return;
 							}
-							if (!room.equals(data['room'])) {
+							/* if (!room.equals(data['room'])) {
 								Bot.reply("끝말잇기를 생성한 방에서만 입력이 가능합니다.");
 								return;
-							}
+							} */
 							/* ------------------------------------------------------- */
 							if (data['power']) {
 								Bot.reply(data['room'], "이미 게임이 진행 중입니다.");
@@ -1369,10 +1369,10 @@ const Game =
 								Bot.reply("현재 생성된 게임이 없습니다.");
 								return;
 							}
-							if (!room.equals(data['room'])) {
+							/* if (!room.equals(data['room'])) {
 								Bot.reply("끝말잇기를 생성한 방에서만 입력이 가능합니다.");
 								return;
-							}
+							} */
 							/* ------------------------------------------------------- */
 							let list = data['players'].map(player => player['id']);
 							if (!list.includes(id)) {
@@ -1396,10 +1396,10 @@ const Game =
 								Bot.reply("진행 중인 게임이 없습니다.");
 								return;
 							}
-							if (!room.equals(data['room'])) {
+							/* if (!room.equals(data['room'])) {
 								Bot.reply("끝말잇기를 생성한 방에서만 입력이 가능합니다.");
 								return;
-							}
+							} */
 							/* ------------------------------------------------------- */
 							let manager = data['manager'];
 							if (!id.equals(manager['id'])) {
@@ -1430,10 +1430,10 @@ const Game =
 						Bot.reply("현재 생성된 게임이 없습니다.");
 						return;
 					}
-					if (!room.equals(data['room'])) {
+					/* if (!room.equals(data['room'])) {
 						Bot.reply("끝말잇기를 생성한 방에서만 입력이 가능합니다.");
 						return;
-					}
+					} */
 					/* ------------------------------------------------------- */
 					// 모드는 게임 중에도 변경 가능
 					/* if (data['power']) {
@@ -1548,10 +1548,10 @@ const Game =
 						Bot.reply("게임이 이미 진행 중입니다.");
 						return;
 					} */
-					if (!room.equals(data['room'])) {
+					/* if (!room.equals(data['room'])) {
 						Bot.reply("끝말잇기를 생성한 방에서만 입력이 가능합니다.");
 						return;
-					}
+					} */
 					/* ------------------------------------------------------- */
 					let manager = data['manager'];
 					if (!id.equals(manager['id'])) {
