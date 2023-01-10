@@ -21,7 +21,7 @@ importPackage(java.net);
 importPackage(java.io);
 
 const GAME_WORD_COMMAND = "::"; // 끝말잇기 단어 입력 시 사용할 명령어 (예시: "::사과", "::과자" 등)
-const BOT_COMMAND_WORD = "/끝말잇기"; // 끝말잇기 명령어 입력 시 사용할 글자 (예시: "/끝말잇기", "@끝말" 등)
+const BOT_COMMAND_WORD = "!끝말잇기"; // 끝말잇기 명령어 입력 시 사용할 글자 (예시: "/끝말잇기", "@끝말" 등)
 const GAME_ROOM_FILTER = []; // 끝말잇기 기능을 사용하지 않을 방 목록 (예시: ["방1", "방2"])
 const GAME_WORD_FILTER = []; // 끝말잇기 금지어를 설정하는 기능 (예시: ["바보", "멍청이"])
 const GAME_TIMER_OUT = 30; // 끝말잇기 턴 넘기기 타이머 시간(초) (즉, 설정한 시간 이상 응답이 없으면 아웃)
@@ -836,7 +836,7 @@ const Game =
 		let object = {
 			'id': id,
 			'name': name,
-			'life': 3,
+			'life': 1,
 			'score': 0,
 		};
 
