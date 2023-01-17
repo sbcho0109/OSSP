@@ -24,8 +24,8 @@ const GAME_WORD_COMMAND = "::"; // 끝말잇기 단어 입력 시 사용할 명�
 const BOT_COMMAND_WORD = "!끝말잇기"; // 끝말잇기 명령어 입력 시 사용할 글자 (예시: "/끝말잇기", "@끝말" 등)
 const GAME_ROOM_FILTER = []; // 끝말잇기 기능을 사용하지 않을 방 목록 (예시: ["방1", "방2"])
 const GAME_WORD_FILTER = []; // 끝말잇기 금지어를 설정하는 기능 (예시: ["바보", "멍청이"])
-const GAME_TIMER_OUT = 30; // 끝말잇기 턴 넘기기 타이머 시간(초) (즉, 설정한 시간 이상 응답이 없으면 아웃)
-const BOT_DELAY_TIME = 2; // AI가 너무 빠르게 답장하는 것을 방지하기 위한 딜레이
+let GAME_TIMER_OUT = 30; // 끝말잇기 턴 넘기기 타이머 시간(초) (즉, 설정한 시간 이상 응답이 없으면 아웃)
+let BOT_DELAY_TIME = 2; // AI가 너무 빠르게 답장하는 것을 방지하기 위한 딜레이
 // const KAKAO_VER970_CHECK = False; // 카카오톡 버전(9.7.0)이상일 때 체크 → 폐기
 
 /** 
@@ -455,6 +455,15 @@ const Word = {
 			return false;
 		}
 
+		// 쿵쿵따 모드가 켜져 있을 때
+		let mode = data['mode']
+		if (mode['kktt'] == true) {
+			if (word.length != 3) {
+				Bot.replydata['room'], ("세 글자 단어를 입력해 주세요.");
+				return false;
+			}
+		}
+
 		// 해당 단어가 존재하지 않는 경우
 		if (!Word.isWord(word)) {
 			Bot.reply(data['room'], "\"" + word + "\"(은)는 사전에 등록되지 않은 단어입니다.");
@@ -746,6 +755,7 @@ const Game =
 			'round': 0,
 			'mode': { // 모드 관련 설정
 				'onecom': false, // 한방단어 사용 여부
+				'kktt': false, // 쿵쿵따 사용 여부
 			},
 			'ai': {
 				'power': false,
@@ -756,6 +766,7 @@ const Game =
 			}
 		};
 		DB.UsedWord = [];
+		GAME_TIMER_OUT = 30;
 	},
 
 	/** 
@@ -836,7 +847,7 @@ const Game =
 		let object = {
 			'id': id,
 			'name': name,
-			'life': 1,
+			'life': 3,
 			'score': 0,
 		};
 
@@ -1126,6 +1137,12 @@ const Game =
 			"[ " + xplayer['name'] + " ] 님은 \"" + doummsg + "\"(으)로 시작하는 단어를 입력해 주세요"
 		);
 
+		// 쿵쿵따 모드가 켜져 있을 때
+		let mode = data['mode']
+		if (mode['kktt'] == true) {
+			Bot.reply("쿵 쿵 따");
+		}
+
 		if (ai['power']) {
 			// 다음 플레이어가 AI 차례라면
 			if (xplayer['id'].equals(ai['id'])) {
@@ -1231,6 +1248,7 @@ const Game =
 						BOT_COMMAND_WORD + " AI 추가 [초보, 중수, 고수]\n\n" +
 						"[ 모드 관련 ]\n" +
 						BOT_COMMAND_WORD + " 모드 한방단어 [켜기, 끄기]\n\n" +
+						BOT_COMMAND_WORD + " 모드 쿵쿵따 [켜기, 끄기]\n\n" +
 						"[ 사전 관련 ]\n" +
 						BOT_COMMAND_WORD + " 검색(사전) 단어 \"단어\"\n" +
 						BOT_COMMAND_WORD + " 검색(사전) 시작단어 \"글자\"\n\n" +
@@ -1471,10 +1489,34 @@ const Game =
 							}
 							break;
 						}
+						case "쿵쿵따": {
+							let mode = data['mode'];
+							switch(input3) {
+								case "켜기": {
+									Bot.reply("쿵쿵따 모드가 켜졌습니다.");
+									mode['kktt'] = true;
+									GAME_TIMER_OUT = 5; // 타이머 시간 설정
+									break;
+								}
+								case "끄기": {
+									Bot.reply("쿵쿵따 모드가 꺼졌습니다.");
+									mode['kktt'] = false;
+									break;
+								}
+								default : {
+									Bot.reply(data['room'],
+										"잘못된 명령어 입력입니다.\n\n" + 
+										"[켜기, 끄기] 중 입력해 주세요."
+									);
+									return;
+								}
+							}
+							break;
+						}
 						default : {
 							Bot.reply(data['room'],
 								"잘못된 명령어 입력입니다.\n\n" + 
-								"[한방단어] 중 입력해 주세요."
+								"[한방단어, 쿵쿵따] 중 입력해 주세요."
 							);
 							return;
 						}
