@@ -451,7 +451,7 @@ const Word = {
 		}
 		// 한 글자만 입력한 경우
 		if (word.length < 2) {
-			Bot.replydata['room'], ("두 글자 이상의 단어를 입력해 주세요.");
+			Bot.reply(data['room'], "두 글자 이상의 단어를 입력해 주세요.");
 			return false;
 		}
 
@@ -459,7 +459,7 @@ const Word = {
 		let mode = data['mode']
 		if (mode['kktt'] == true) {
 			if (word.length != 3) {
-				Bot.replydata['room'], ("세 글자 단어를 입력해 주세요.");
+				Bot.reply(data['room'], "세 글자 단어를 입력해 주세요.");
 				return false;
 			}
 		}
@@ -1131,16 +1131,16 @@ const Game =
 				
 		let meanmsg = (mean.length > 30) ? mean.substr(0, 25) + "..." : mean;
 			doummsg = (doum) ? lchar + "(" + doum + ")" : lchar; 
-			
-		Bot.reply(data['room'], "< " + meanmsg + " >\n\n" +
-			"[ " + player['name'] + " ] 님이 \"" + word + "\" 단어를 입력했습니다.\n" +
-			"[ " + xplayer['name'] + " ] 님은 \"" + doummsg + "\"(으)로 시작하는 단어를 입력해 주세요"
-		);
 
 		// 쿵쿵따 모드가 켜져 있을 때
 		let mode = data['mode']
 		if (mode['kktt'] == true) {
-			Bot.reply("쿵 쿵 따");
+			Bot.reply(data['room'], "다음 순서 [ " + xplayer['name'] + " ]");
+			Bot.reply(data['room'], "쿵 쿵 따");
+		} else {
+			Bot.reply(data['room'], "< " + meanmsg + " >\n\n" +
+			"[ " + player['name'] + " ] 님이 \"" + word + "\" 단어를 입력했습니다.\n" +
+			"[ " + xplayer['name'] + " ] 님은 \"" + doummsg + "\"(으)로 시작하는 단어를 입력해 주세요");
 		}
 
 		if (ai['power']) {
