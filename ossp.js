@@ -1247,7 +1247,7 @@ const Game =
 						"[ AI 관련 ]\n" +
 						BOT_COMMAND_WORD + " AI 추가 [초보, 중수, 고수]\n\n" +
 						"[ 모드 관련 ]\n" +
-						BOT_COMMAND_WORD + " 모드 한방단어 [켜기, 끄기]\n\n" +
+						BOT_COMMAND_WORD + " 모드 한방단어 [켜기, 끄기]\n" +
 						BOT_COMMAND_WORD + " 모드 쿵쿵따 [켜기, 끄기]\n\n" +
 						"[ 사전 관련 ]\n" +
 						BOT_COMMAND_WORD + " 검색(사전) 단어 \"단어\"\n" +
