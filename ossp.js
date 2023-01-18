@@ -1229,7 +1229,7 @@ const Game =
 			if (!input1) {
 				Bot.reply(
 					"잘못된 명령어 입력입니다.\n\n" + 
-					"도움말을 참고하여 \"/끝말잇기 [기능]\"과 같은 형식으로 입력해 주세요."
+					"도움말을 참고하여 \"!끝말잇기 [기능]\"과 같은 형식으로 입력해 주세요."
 				);
 				return;
 			}
@@ -1534,7 +1534,7 @@ const Game =
 					}
 					switch (input2) {
 						case "단어" : {
-							// /끝말잇기 검색 단어 "사과"
+							// !끝말잇기 검색 단어 "사과"
 							let word = message.split("\"")[1];
 							if (Word.isWord(word)) {
 								let means = Word.getMean(word), text = [], index = 0;
@@ -1689,9 +1689,13 @@ const Game =
 				}
 
 				case "금지어" : {
+					if (!DB.load()) {
+						Bot.reply("DB를 불러오는 중 문제가 발생했습니다.");
+						return;
+					}
 					switch (input2) {
 						case "추가" : {
-							// /끝말잇기 금지어 추가 "사과"
+							// !끝말잇기 금지어 추가 "사과"
 							let word = message.split("\"")[1];
 							if (Word.isWord(word) == true) {
 								GAME_WORD_FILTER.push(word);
@@ -1704,11 +1708,12 @@ const Game =
 							break;
 						}
 						case "삭제" : {
-							if (GAME_WORD_FILTER.indexOf(word) == ture) {
-								for (var i = 0; i < GAME_WORD_FILTER.length; i++) {
-									if (word == GAME_WORD_FILTER[i]) {
-										GAME_WORD_FILTER.splice(i, 1);
-									}
+							// !끝말잇기 금지어 삭제 "사과"
+							let word = message.split("\"")[1];
+							for (var i = 0; i < GAME_WORD_FILTER.length; i++) {
+								if (word == GAME_WORD_FILTER[i]) {
+									GAME_WORD_FILTER.splice(i, 1);
+									Bot.reply(word + ", 금지어를 삭제했습니다.");
 								}
 							}
 							break;
