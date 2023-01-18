@@ -22,8 +22,8 @@ importPackage(java.io);
 
 const GAME_WORD_COMMAND = "::"; // 끝말잇기 단어 입력 시 사용할 명령어 (예시: "::사과", "::과자" 등)
 const BOT_COMMAND_WORD = "!끝말잇기"; // 끝말잇기 명령어 입력 시 사용할 글자 (예시: "/끝말잇기", "@끝말" 등)
-const GAME_ROOM_FILTER = []; // 끝말잇기 기능을 사용하지 않을 방 목록 (예시: ["방1", "방2"])
-const GAME_WORD_FILTER = []; // 끝말잇기 금지어를 설정하는 기능 (예시: ["바보", "멍청이"])
+let GAME_ROOM_FILTER = []; // 끝말잇기 기능을 사용하지 않을 방 목록 (예시: ["방1", "방2"])
+let GAME_WORD_FILTER = []; // 끝말잇기 금지어를 설정하는 기능 (예시: ["바보", "멍청이"])
 let GAME_TIMER_OUT = 30; // 끝말잇기 턴 넘기기 타이머 시간(초) (즉, 설정한 시간 이상 응답이 없으면 아웃)
 let BOT_DELAY_TIME = 2; // AI가 너무 빠르게 답장하는 것을 방지하기 위한 딜레이
 // const KAKAO_VER970_CHECK = False; // 카카오톡 버전(9.7.0)이상일 때 체크 → 폐기
@@ -1252,7 +1252,7 @@ const Game =
 						"[ 사전 관련 ]\n" +
 						BOT_COMMAND_WORD + " 검색(사전) 단어 \"단어\"\n" +
 						BOT_COMMAND_WORD + " 검색(사전) 시작단어 \"글자\"\n\n" +
-						"※ 사전 주의사항 : \"단어\"에서 큰따옴표를 포함해야 인식됩니다."
+						"※ 사전 주의사항 : \"단어\"에서 큰따옴표를 포함해야 인식됩니다." 
 					); 
 					break;
 				}
@@ -1677,6 +1677,43 @@ const Game =
 
 						default : {
 							Bot.reply(data['room'],
+								"잘못된 명령어 입력입니다.\n\n" + 
+								"[추가, 삭제] 중 입력해 주세요."
+							);
+							return;
+						}
+					}
+					break;
+				}
+
+				case "금지어" : {
+					switch (input2) {
+						case "추가" : {
+							// /끝말잇기 금지어 추가 "사과"
+							let word = message.split("\"")[1];
+							if (Word.isWord(word) == true) {
+								GAME_WORD_FILTER.push(word);
+								Bot.reply(word + ", 금지어를 추가했습니다.");
+							}
+							else {
+								Bot.reply("사전에 등록되지 않은 단어입니다.");
+								return;
+							}
+							break;
+						}
+						case "삭제" : {
+							if (GAME_WORD_FILTER.indexOf(word) == ture) {
+								for (var i = 0; i < GAME_WORD_FILTER.length; i++) {
+									if (word == GAME_WORD_FILTER[i]) {
+										GAME_WORD_FILTER.splice(i, 1);
+									}
+								}
+							}
+							break;
+						}
+						
+						default : {
+							Bot.reply(
 								"잘못된 명령어 입력입니다.\n\n" + 
 								"[추가, 삭제] 중 입력해 주세요."
 							);
