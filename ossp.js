@@ -1252,7 +1252,8 @@ const Game =
 						BOT_COMMAND_WORD + " 모드 한방단어 [켜기, 끄기]\n" +
 						BOT_COMMAND_WORD + " 모드 쿵쿵따 [켜기, 끄기]\n\n" +
 						"[ 금지어 관련 ]\n" +
-						BOT_COMMAND_WORD + " 금지어 [추가, 삭제] \"단어\"\n\n" +
+						BOT_COMMAND_WORD + " 금지어 [추가, 삭제] \"단어\"\n" +
+						BOT_COMMAND_WORD + " 금지어 목록\n\n" +
 						"[ 사전 관련 ]\n" +
 						BOT_COMMAND_WORD + " 검색(사전) 단어 \"단어\"\n" +
 						BOT_COMMAND_WORD + " 검색(사전) 시작단어 \"글자\"\n\n" +
