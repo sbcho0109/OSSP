@@ -767,6 +767,8 @@ const Game =
 		};
 		DB.UsedWord = [];
 		GAME_TIMER_OUT = 30;
+		GAME_ROOM_FILTER = [];
+		GAME_WORD_FILTER = [];
 	},
 
 	/** 
@@ -1718,11 +1720,19 @@ const Game =
 							}
 							break;
 						}
+						case "목록" : {
+							let text = [], index = 0;
+							GAME_WORD_FILTER.forEach(element => {
+								text[index++] = (element);
+							});
+							Bot.reply("[ 금지어 목록 ] \n" + text.join(", "));
+							break;
+						}
 						
 						default : {
 							Bot.reply(
 								"잘못된 명령어 입력입니다.\n\n" + 
-								"[추가, 삭제] 중 입력해 주세요."
+								"[추가, 삭제, 목록] 중 입력해 주세요."
 							);
 							return;
 						}
